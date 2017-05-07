@@ -44,7 +44,9 @@ $.richFilemanagerPlugin = function(element, pluginOptions)
 	 * Plugin's default options
 	 */
 	var defaults = {
-		baseUrl: '.',	// relative path to the FM plugin folder
+                //INFO: Changed
+		//baseUrl: '.',	// relative path to the FM plugin folder
+                baseUrl: '.' + '/' + assetsDir,
 		config: {},		// configuration options
         callbacks: {
             beforeCreateImageUrl: function (resourceObject, url) {
@@ -325,8 +327,7 @@ $.richFilemanagerPlugin = function(element, pluginOptions)
 	// localize messages based on culture var or from URL
 	var localize = function() {
 		var langCode = $.urlParam('langCode');
-		//var langPath = fm.settings.baseUrl + '/languages/';
-                var langPath = fm.settings.baseUrl + '/' + assetsDir + '/languages/';
+		var langPath = fm.settings.baseUrl + '/languages/';
                 
                 try{               
                     if(fm.settings.config.options.culture !== undefined && fm.settings.config.options.culture !== null){
@@ -808,8 +809,7 @@ $.richFilemanagerPlugin = function(element, pluginOptions)
 				}
 				if(isOpenDocFile(filename) && config.viewer.opendoc.enabled === true) {
 					viewerObject.type = 'opendoc';
-					//viewerObject.url = fm.settings.baseUrl + '/scripts/ViewerJS/index.html#' + createPreviewUrl(resourceObject, true);
-                                        viewerObject.url = fm.settings.baseUrl + '/' + assetsDir + '/scripts/ViewerJS/index.html#' + createPreviewUrl(resourceObject, true);
+					viewerObject.url = fm.settings.baseUrl + '/scripts/ViewerJS/index.html#' + createPreviewUrl(resourceObject, true);
 					viewerObject.options = {
 						width: config.viewer.opendoc.readerWidth,
 						height: config.viewer.opendoc.readerHeight
@@ -852,8 +852,7 @@ $.richFilemanagerPlugin = function(element, pluginOptions)
                 model.previewFile(true);
 
 				// zeroClipboard code
-				//ZeroClipboard.config({swfPath: fm.settings.baseUrl + '/scripts/zeroclipboard/dist/ZeroClipboard.swf'});
-                                ZeroClipboard.config({swfPath: fm.settings.baseUrl + '/' + assetsDir + '/scripts/zeroclipboard/dist/ZeroClipboard.swf'});
+				ZeroClipboard.config({swfPath: fm.settings.baseUrl + '/scripts/zeroclipboard/dist/ZeroClipboard.swf'});
 				var client = new ZeroClipboard(document.getElementById("fm-js-clipboard-copy"));
 				client.on("ready", function(readyEvent) {
 					client.on("aftercopy", function(event) {
@@ -1745,15 +1744,12 @@ $.richFilemanagerPlugin = function(element, pluginOptions)
 
 		if(type === 'user') {
 			if($.urlParam('config') != 0) {
-				//url = fm.settings.baseUrl + '/scripts/' + $.urlParam('config');
-                                url = fm.settings.baseUrl + '/' + assetsDir + '/scripts/' + $.urlParam('config');
+				url = fm.settings.baseUrl + '/scripts/' + $.urlParam('config');
                             } else {
-                                //url = fm.settings.baseUrl + '/scripts/filemanager.config.json';
-                                url = fm.settings.baseUrl + '/' + assetsDir + '/scripts/filemanager.config.json';
+                                url = fm.settings.baseUrl + '/scripts/filemanager.config.json';
 			}
 		} else {
-			//url = fm.settings.baseUrl + '/scripts/filemanager.config.default.json';
-                        url = fm.settings.baseUrl + '/' + assetsDir + '/scripts/filemanager.config.default.json';
+			url = fm.settings.baseUrl + '/scripts/filemanager.config.default.json';
 		}
 
 		return $.ajax({
@@ -1769,8 +1765,7 @@ $.richFilemanagerPlugin = function(element, pluginOptions)
 
 	// Loads a given css file into header if not already included
 	var loadCSS = function(href) {
-		//href = fm.settings.baseUrl + href;
-            href = fm.settings.baseUrl  + '/' + assetsDir + href;
+            href = fm.settings.baseUrl + href;
 		// check if already included
 		if($.inArray(href, HEAD_included_files) === -1) {
 			$("<link>").attr({
@@ -1785,8 +1780,7 @@ $.richFilemanagerPlugin = function(element, pluginOptions)
 
 	// Loads a given js file into header if not already included
 	var loadJS = function(src) {
-		//src = fm.settings.baseUrl + src;
-                src = fm.settings.baseUrl + '/' + assetsDir + src;
+		src = fm.settings.baseUrl + src;
 		if($.inArray(src, HEAD_included_files) === -1) {
 			$("<script>").attr({
 				type: "text/javascript",
@@ -1800,8 +1794,7 @@ $.richFilemanagerPlugin = function(element, pluginOptions)
 	var loadTemplate = function(id, data) {
 		return $.ajax({
 			type: 'GET',
-			//url: fm.settings.baseUrl + '/scripts/templates/' + id + '.html',
-                        url: fm.settings.baseUrl + '/' + assetsDir + '/scripts/templates/' + id + '.html',
+			url: fm.settings.baseUrl + '/scripts/templates/' + id + '.html',
 			error: handleAjaxError
 		});
 	};
@@ -2916,8 +2909,7 @@ $.richFilemanagerPlugin = function(element, pluginOptions)
 							var $template = $(tmpl('tmpl-upload-item', {
 								file: file,
 								lang: lg,
-								//imagesPath: fm.settings.baseUrl + '/scripts/jQuery-File-Upload/img'
-                                                                 imagesPath: fm.settings.baseUrl + '/' + assetsDir + '/scripts/jQuery-File-Upload/img'
+								imagesPath: fm.settings.baseUrl + '/scripts/jQuery-File-Upload/img'
 							}));
 							file.context = $template;
 							$template.find('.buttons').data(data);
