@@ -20,7 +20,6 @@ abstract class BaseFilemanager
 
     public $config = [];
     protected $refParams = [];
-    protected $language = [];
     protected $get = [];
     protected $post = [];
     protected $fm_path = '';
@@ -37,7 +36,8 @@ abstract class BaseFilemanager
             'name'      => '',
             'extension' => '',
             'path'      => '',
-            'protected' => 0,
+            'readable'  => 1,
+            'writable'  => 1,
             'created'   => '',
             'modified'  => '',
             'timestamp' => '',
@@ -57,7 +57,8 @@ abstract class BaseFilemanager
         "attributes" => [
             'name'      => '',
             'path'      => '',
-            'protected' => 0,
+            'readable'  => 1,
+            'writable'  => 1,
             'created'   => '',
             'modified'  => '',
             'timestamp' => '',
@@ -68,13 +69,12 @@ abstract class BaseFilemanager
      * List of all possible actions
      * @var array
      */
-    protected $actions_list = ["select", "upload", "download", "rename", "move", "replace", "delete", "edit"];
+    protected $actions_list = ["select", "upload", "download", "rename", "copy", "move", "replace", "delete", "edit"];
 
     /**
      * BaseFilemanager constructor.
      * @param array $config
      */
-    //INFO: Changed
     public function __construct($config = [])
     {
         // fix display non-latin chars correctly
@@ -84,24 +84,23 @@ abstract class BaseFilemanager
         // fix for undefined timezone in php.ini
         // https://github.com/servocoder/RichFilemanager/issues/43
         if(!ini_get('date.timezone')) {
-            //TODO: will set to GMT+8
             date_default_timezone_set('GMT');
         }
 
         $this->config = $config;
+        //INFO: Changed
         //$this->fm_path = $this->config['fmPath'] ? $this->config['fmPath'] : dirname(dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
         //Info: will give location in web/, not web/assets.
         //$this->fm_path = $this->config['fmPath'] ? $this->config['fmPath'] : dirname(dirname(dirname(dirname($_SERVER['SCRIPT_FILENAME']))));
         //Info: will give location in /
         $this->fm_path = $this->config['fmPath'] ? $this->config['fmPath'] : $_SERVER['DOCUMENT_ROOT'];
- 
+
         $this->allowed_actions = $this->actions_list;
         if($this->config['options']['capabilities']) {
             $this->setAllowedActions($this->config['options']['capabilities']);
         }
 
         $this->setParams();
-        $this->loadLanguageFile();
     }
 
     /**
@@ -137,6 +136,11 @@ abstract class BaseFilemanager
      * Rename file or folder - filemanager action
      */
     abstract function actionRename();
+
+    /**
+     * Copy file or folder - filemanager action
+     */
+    abstract function actionCopy();
 
     /**
      * Move file or folder - filemanager action
@@ -187,6 +191,12 @@ abstract class BaseFilemanager
     abstract function actionSummarize();
 
     /**
+     * Extracts files and folders from archive - filemanager action
+     * @return array
+     */
+    abstract function actionExtract();
+
+    /**
      * Set userfiles root folder
      * @param string $path
      * @param bool $mkdir
@@ -213,7 +223,7 @@ abstract class BaseFilemanager
         $response = '';
 
         if(!isset($_GET)) {
-            $this->error($this->lang('INVALID_ACTION'));
+            $this->error('INVALID_ACTION');
         } else {
 
             if(isset($_GET['mode']) && $_GET['mode']!='') {
@@ -221,7 +231,7 @@ abstract class BaseFilemanager
                 switch($_GET['mode']) {
 
                     default:
-                        $this->error($this->lang('MODE_ERROR'));
+                        $this->error('MODE_ERROR');
                         break;
 
                     case 'initiate':
@@ -243,6 +253,12 @@ abstract class BaseFilemanager
                     case 'rename':
                         if($this->getvar('old') && $this->getvar('new')) {
                             $response = $this->actionRename();
+                        }
+                        break;
+
+                    case 'copy':
+                        if($this->getvar('source') && $this->getvar('target')) {
+                            $response = $this->actionCopy();
                         }
                         break;
 
@@ -299,7 +315,7 @@ abstract class BaseFilemanager
                 switch($_POST['mode']) {
 
                     default:
-                        $this->error($this->lang('MODE_ERROR'));
+                        $this->error('MODE_ERROR');
                         break;
 
                     case 'upload':
@@ -317,6 +333,12 @@ abstract class BaseFilemanager
                     case 'savefile':
                         if($this->postvar('path') && $this->postvar('content', false)) {
                             $response = $this->actionSaveFile();
+                        }
+                        break;
+
+                    case 'extract':
+                        if($this->postvar('source') && $this->postvar('target')) {
+                            $response = $this->actionExtract();
                         }
                         break;
                 }
@@ -349,27 +371,6 @@ abstract class BaseFilemanager
     }
 
     /**
-     * Load language file and retrieve all messages.
-     * Defines language code based on "langCode" variable if exists otherwise uses configuration option.
-     */
-    //INFO: Changed
-    protected function loadLanguageFile()
-    {
-        $lang = $this->config['options']['culture'];
-        if(isset($this->refParams['langCode'])) {
-            $lang = $this->refParams['langCode'];
-        }
-
-        //$lang_path = dirname(dirname(dirname(__FILE__))) . "/languages/{$lang}.json";
-        $lang_path = dirname(dirname(__FILE__)) . "/languages/{$lang}.json";
-
-        if (file_exists($lang_path)) {
-            $stream = file_get_contents($lang_path);
-            $this->language = json_decode($stream, true);
-        }
-    }
-
-    /**
      * Checking if permission is set or not for a given action
      * @param string $action
      * @return boolean
@@ -381,41 +382,33 @@ abstract class BaseFilemanager
 
     /**
      * Echo error message and terminate the application
-     * @param string $title
+     * @param string $label
+     * @param array $arguments
      */
-    public function error($title)
+    public function error($label, $arguments = [])
     {
-        Log::info('error message: "' . $title . '"');
+        $log_message = 'Error code: ' . $label;
+        if ($arguments) {
+            $log_message .= ', arguments: ' . json_encode($arguments);
+        }
+        Log::info($log_message);
 
         if($this->isAjaxRequest()) {
             $error_object = [
                 'id' => 'server',
                 'code' => '500',
-                'title' => $title
+                'message' => $label,
+                'arguments' => $arguments
             ];
 
             echo json_encode([
                 'errors' => [$error_object],
             ]);
         } else {
-            echo "<h2>Server error: {$title}</h2>";
+            echo "<h2>Server error: {$label}</h2>";
         }
 
         exit;
-    }
-
-    /**
-     * Setup language by code
-     * @param $string
-     * @return string
-     */
-    public function lang($string)
-    {
-        if(!empty($this->language[$string])) {
-            return $this->language[$string];
-        } else {
-            return 'Language string error on ' . $string;
-        }
     }
 
     /**
@@ -427,7 +420,7 @@ abstract class BaseFilemanager
     public function getvar($var, $sanitize = true)
     {
         if(!isset($_GET[$var]) || $_GET[$var]=='') {
-            $this->error(sprintf($this->lang('INVALID_VAR'),$var));
+            $this->error('INVALID_VAR', [$var]);
         } else {
             if($sanitize) {
                 $this->get[$var] = $this->sanitize($_GET[$var]);
@@ -447,14 +440,13 @@ abstract class BaseFilemanager
     public function postvar($var, $sanitize = true)
     {
         if(!isset($_POST[$var]) || ($var != 'content' && $_POST[$var]=='')) {
-            $this->error(sprintf($this->lang('INVALID_VAR'),$var));
+            $this->error('INVALID_VAR', [$var]);
         } else {
             if($sanitize) {
                 $this->post[$var] = $this->sanitize($_POST[$var]);
             } else {
                 $this->post[$var] = $_POST[$var];
             }
-           
             return true;
         }
     }

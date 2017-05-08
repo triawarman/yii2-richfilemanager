@@ -1,4 +1,5 @@
 <?php
+
 require_once('BaseUploadHandler.php');
 
 class LocalUploadHandler extends BaseUploadHandler
@@ -24,9 +25,8 @@ class LocalUploadHandler extends BaseUploadHandler
         $this->fmData = $this->options['fm']['data'];
 
         $this->options['upload_dir'] = $this->fmData['upload_dir'];
-         
-        $this->options['param_name'] = $this->fm->config['upload']['paramName'];
-        $this->options['readfile_chunk_size'] = $this->fm->config['upload']['chunkSize'];
+        $this->options['param_name'] = 'files';
+        $this->options['readfile_chunk_size'] = 10 * 1024 * 1024;
         $this->options['max_file_size'] = $this->fm->config['upload']['fileSizeLimit'];
         // BaseFilemanager::is_allowed_file_type() is used instead of this regex check
         $this->options['accept_file_types'] = '/.+$/i';
@@ -58,9 +58,9 @@ class LocalUploadHandler extends BaseUploadHandler
             );
         }
 
-        $this->error_messages['accept_file_types'] = $this->fm->lang('INVALID_FILE_TYPE');
-        $this->error_messages['max_file_size'] = sprintf($this->fm->lang('UPLOAD_FILES_SMALLER_THAN'), (round($this->fm->config['upload']['fileSizeLimit'] / 1000 / 1000, 2)) . ' ' . $this->fm->lang('mb'));
-        $this->error_messages['max_storage_size'] = sprintf($this->fm->lang('STORAGE_SIZE_EXCEED'), (round($this->fm->config['options']['fileRootSizeLimit'] / 1000 / 1000, 2)) . ' ' . $this->fm->lang('mb'));
+        $this->error_messages['accept_file_types'] = 'INVALID_FILE_TYPE';
+        $this->error_messages['max_file_size'] = ['UPLOAD_FILES_SMALLER_THAN', [round($this->fm->config['upload']['fileSizeLimit'] / 1000 / 1000, 2) . ' Mb']];
+        $this->error_messages['max_storage_size'] = ['STORAGE_SIZE_EXCEED', [round($this->fm->config['options']['fileRootSizeLimit'] / 1000 / 1000, 2) . ' Mb']];
     }
 
     public function create_thumbnail_image($image_path)
@@ -69,7 +69,7 @@ class LocalUploadHandler extends BaseUploadHandler
         $file_path = $this->get_upload_path($file_name);
         if ($this->is_valid_image_file($file_path)) {
             $version = 'thumbnail';
-            if(isset($this->options['image_versions'][$version])) {
+            if (isset($this->options['image_versions'][$version])) {
                 $thumbnail_options = $this->options['image_versions'][$version];
                 $this->create_scaled_image($file_name, $version, $thumbnail_options);
                 // Free memory:
@@ -84,7 +84,7 @@ class LocalUploadHandler extends BaseUploadHandler
     }
 
     protected function get_unique_filename($file_path, $name, $size, $type, $error, $index, $content_range) {
-        if($this->fm->config['upload']['overwrite']) {
+        if ($this->fm->config['upload']['overwrite']) {
             return $name;
         }
         return parent::get_unique_filename($file_path, $name, $size, $type, $error, $index, $content_range);
@@ -109,7 +109,7 @@ class LocalUploadHandler extends BaseUploadHandler
             return false;
         }
         if(!$this->fm->is_allowed_name($file->name, false)) {
-            $file->error = sprintf($this->fm->lang('FORBIDDEN_NAME'), $file->name);
+            $file->error = ['FORBIDDEN_NAME', [$file->name]];
             return false;
         }
         if ($uploaded_file && is_uploaded_file($uploaded_file)) {
@@ -141,16 +141,15 @@ class LocalUploadHandler extends BaseUploadHandler
             $file->error = $this->get_error_message('max_number_of_files');
             return false;
         }
-        if($this->fmData['images_only'] && !$this->is_valid_image_file($uploaded_file)) {
-            $file->error = sprintf($this->fm->lang('UPLOAD_IMAGES_ONLY'));
+        if($this->fmData['images_only'] && !$this->is_valid_image_name($file->name)) {
+            $file->error = 'UPLOAD_IMAGES_ONLY';
             return false;
         }
         $max_width = @$this->options['max_width'];
         $max_height = @$this->options['max_height'];
         $min_width = @$this->options['min_width'];
         $min_height = @$this->options['min_height'];
-        if (($max_width || $max_height || $min_width || $min_height)
-            && preg_match($this->options['image_file_types'], $file->name)) {
+        if (($max_width || $max_height || $min_width || $min_height) && $this->is_valid_image_name($file->name)) {
             list($img_width, $img_height) = $this->get_image_size($uploaded_file);
 
             // If we are auto rotating the image by default, do the checks on

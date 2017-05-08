@@ -15,9 +15,8 @@
 // ini_set('display_errors', '1');
 
 require_once('application/Fm.php');
+//INFO: Will Changed to disabled
 //require_once('application/FmHelper.php');
-
-
 
 //INFO: Disabled
 //function auth()
@@ -40,7 +39,8 @@ $config = array();
 //    ),
 //);
 
-$config =['auth' => true];
+//INFO: Changed | Own script
+$config =['auth' => false];
 
 $fm = Fm::app()->getInstance($config);
 
