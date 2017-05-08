@@ -25,4 +25,4 @@ Version 0.1
         - Alter $this->fm-path, to get "web" folder location, not "web/assets"
     c) connector/filemanager.php
     d) assets/scripts/filemanager.js
-        a) Added function to check published folder name, and the exact location
+        - Added function to check published folder name, and the exact location
