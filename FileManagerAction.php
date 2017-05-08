@@ -17,10 +17,14 @@ class FileManagerAction extends Action
     
     /**
      * 
-     * @var array[] 
+     * @serverConfig array[] 
      */
     public $serverConfig = [];
     
+    /**
+     * 
+     * @auth boolean. Authentication that ensures can/can't use RichFilemanager
+     */
     public $auth = true;
     
     /**
@@ -28,25 +32,16 @@ class FileManagerAction extends Action
      */
     public function init()
     {
-        /*
-         * TODO: Should make default cant upload/download/seeing files
-         */
-        //$this->fm = \Fm::app()->getInstance(ArrayHelper::merge(['auth'=> $this->auth], $this->serverConfig)); 
+        //INFO: Do nothing
     }
     
     public function run()
     {
-        /*
-        if(!empty($this->serverConfig)){
-            if(isset($this->serverConfig['options']['fileRoot'])){
-                $this->fm->setFileRoot($this->serverConfig['options']['fileRoot'], 
-                    //true,
-                    isset($this->serverConfig['options']['serverRoot']) && $this->serverConfig['options']['fileRoot'] ? true : false);
-            }
-        }
-        */
         $this->fm = \Fm::app()->getInstance(ArrayHelper::merge(['auth'=> $this->auth], $this->serverConfig)); 
-        //$this->fm->setFileRoot($this->serverConfig['options']['fileRoot'], true);
+        $this->fm->setFileRoot(
+                $this->serverConfig['options']['fileRoot'], 
+                isset($this->serverConfig['options']['serverRoot']) && $this->serverConfig['options']['fileRoot'] ? true : false
+            );
         $this->fm->handleRequest();
     }
     

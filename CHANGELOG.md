@@ -1,6 +1,7 @@
 Version 0.2
 -------------------------------
-* Using servoceoder/richfilemanager ver 2.3.2
+* Using 
+    servoceoder/richfilemanager ver 2.3.2
 * Adjustment files
     a) ReadMe.md of RichFilemanager
         - renamed to RichFilemanager.ReadMe.md

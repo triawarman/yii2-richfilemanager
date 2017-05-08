@@ -16,26 +16,24 @@ Class RichFilemanagerView extends Widget
 {
     /**
      *
-     * @var string that holds AssetsBundle.
+     * @bundle string that holds AssetsBundle.
      */
     private $bundle;
         
     /**
      *
-     * @var string of absolute url to serve data transaction 
+     * @apiConnectorUrl string of absolute url to serve data transaction 
      */
     public $apiConnectorUrl;
-    
-    public $popUp = false;
-    
+        
     /**
      *
-     * @var array. Each array element represents the richFilemanager configuration,
-     * altough only can manipulate culture(language) and theme (for now).
+     * @clientConfig array[]. Each array element represents the richFilemanager configuration,
+     * altough only can manipulate connectorUrl, culture(language) and theme (for now).
      */
     public $clientConfig = [];
     
-    public $callBacks = []; //TODO: will enable this in the future
+    //public $callBacks = []; //TODO: will enable this in the future
     
     /**
      * Initializes the widget.
@@ -59,9 +57,6 @@ Class RichFilemanagerView extends Widget
             //INFO: set default api connectorUrl
             $pluginParams['config']['api']['connectorUrl'] =  Url::to([Yii::$app->controller->id.'/'.'file-manager'], true);
         }
-        
-        if($this->popUp)
-            $pluginParams = ArrayHelper::merge(['popUp' => $this->popUp], $pluginParams);
         
         if(!empty($this->clientConfig)){
             $config =['config' => $this->clientConfig];
