@@ -70,9 +70,7 @@ if you want passing some plugin parameters
 
 For now you can only set culture, theme, and connectorUrl parameter for client side plugin.
 
-
-make sure you make folder named "userfiles" in document root.
-ex: advanced/userfiles or basic/userfiles
+Default connectorUrl is your {active control}/file-manager.
 
 Documentation
 ------------
