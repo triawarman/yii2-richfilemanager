@@ -6,7 +6,7 @@
     background-color: #F4F1ED;
 }
 
-.fm-container .fm-header .current-path > h1 {
+.fm-container .fm-header .breadcrumbs {
     color: #000000;
 }
 
@@ -25,7 +25,7 @@
     background-color: #fff;
 }
 
-.fm-container .fm-fileinfo h1 {
+.fm-container .fm-preview .fm-preview-title h1 {
     color: #8fabc6;
 }
 
@@ -76,16 +76,16 @@
 }
 
 .fm-container .drag-helper-grid,
-.fm-container .view-items.grid li {
+.fm-container .view-items .grid li {
     width: 142px;
 }
 
-.fm-container .view-items.grid li.drop-hover,
-.fm-container .view-items.list tr.drop-hover {
+.fm-container .view-items .grid li.drop-hover,
+.fm-container .view-items .list tr.drop-hover {
     background-color: #e0e0e0;
 }
 
-.fm-container .view-items.list td {
+.fm-container .view-items .list td {
     border-bottom: 1px dotted #ccc;
 }
 

@@ -31,18 +31,22 @@ class FileManagerAction extends Action
         /*
          * TODO: Should make default cant upload/download/seeing files
          */
-        $this->fm = \Fm::app()->getInstance(ArrayHelper::merge(['auth'=> $this->auth], $this->serverConfig)); 
+        //$this->fm = \Fm::app()->getInstance(ArrayHelper::merge(['auth'=> $this->auth], $this->serverConfig)); 
     }
     
     public function run()
     {
+        /*
         if(!empty($this->serverConfig)){
             if(isset($this->serverConfig['options']['fileRoot'])){
-                $this->fm->setFileRoot($this->serverConfig['options']['fileRoot'],
+                $this->fm->setFileRoot($this->serverConfig['options']['fileRoot'], 
+                    //true,
                     isset($this->serverConfig['options']['serverRoot']) && $this->serverConfig['options']['fileRoot'] ? true : false);
             }
         }
-        
+        */
+        $this->fm = \Fm::app()->getInstance(ArrayHelper::merge(['auth'=> $this->auth], $this->serverConfig)); 
+        //$this->fm->setFileRoot($this->serverConfig['options']['fileRoot'], true);
         $this->fm->handleRequest();
     }
     

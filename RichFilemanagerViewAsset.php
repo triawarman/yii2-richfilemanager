@@ -17,7 +17,8 @@ class RichFilemanagerViewAsset extends AssetBundle{
         'styles/reset.css',
         'styles/filemanager.css',
         'scripts/jquery.contextmenu/dist/jquery.contextMenu.min.css',
-        'scripts/custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css',
+        //INFO: called from filemanager.js
+        //'scripts/custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css',
         'scripts/alertify.js/dist/css/alertify.css',
     ];
     public $js = [
@@ -25,12 +26,19 @@ class RichFilemanagerViewAsset extends AssetBundle{
         //'scripts/jquery-ui.min.js',
         'scripts/jquery-browser.js',
         'scripts/knockout-3.4.0.js',
+        'scripts/jquery-mousewheel/jquery.mousewheel.min.js',
         'scripts/jquery.splitter/dist/jquery-splitter.js',
         'scripts/jquery.contextmenu/dist/jquery.contextMenu.min.js',
         'scripts/alertify.js/dist/js/alertify.js',
+        'scripts/zeroclipboard/dist/ZeroClipboard.js',
+        'scripts/jquery.fileDownload/jquery.fileDownload.min.js',        
         'scripts/javascript-templates/js/tmpl.min.js',
-        //'assets/scripts/filemanager.min.js',
+        'scripts/toast/lib/toast.min.js',
+        'scripts/purl/purl.min.js',
+        //TODO: Change this when in production mode
+        //'scripts/filemanager.min.js',
         'scripts/filemanager.js',
+        //'config/filemanager.init.js',
     ];
     public $depends = [
         'yii\web\JqueryAsset',
