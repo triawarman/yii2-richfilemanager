@@ -38,7 +38,9 @@ assetsDir = arr[arr.length - 4] + '/' + arr[arr.length - 3];
          * Plugin's default options
          */
         var defaults = {
-            baseUrl: '.', // relative path to the FM plugin folder
+            //INFO: Changed
+            //baseUrl: '.', // relative path to the FM plugin folder
+            baseUrl: './' + assetsDir,
             config: {}, // configuration options
             callbacks: {
                 beforeCreateImageUrl: function (resourceObject, url) {
@@ -317,9 +319,7 @@ assetsDir = arr[arr.length - 4] + '/' + arr[arr.length - 3];
         // localize messages based on culture var or from URL
         var localize = function () {
             var langCode = _url_.param('langCode');
-            //INFO: Changed
-            //var langPath = fm.settings.baseUrl + '/languages/';
-            var langPath = fm.settings.baseUrl + '/' + assetsDir + '/languages/';
+            var langPath = fm.settings.baseUrl + '/languages/';
           
             //INFO: Own script
             //Start
@@ -1090,9 +1090,7 @@ assetsDir = arr[arr.length - 4] + '/' + arr[arr.length - 3];
                     }
                     if (isOpenDocFile(filename) && config.viewer.opendoc.enabled === true) {
                         viewerObject.type = 'opendoc';
-                        //INFO: Changed
-                        //viewerObject.url = fm.settings.baseUrl + '/scripts/ViewerJS/index.html#' + createPreviewUrl(resourceObject, true);
-                        viewerObject.url = fm.settings.baseUrl + '/' + assetsDir + '/scripts/ViewerJS/index.html#' + createPreviewUrl(resourceObject, true);
+                        viewerObject.url = fm.settings.baseUrl + '/scripts/ViewerJS/index.html#' + createPreviewUrl(resourceObject, true);
                        
                         viewerObject.options = {
                             width: config.viewer.opendoc.readerWidth,
@@ -1138,9 +1136,7 @@ assetsDir = arr[arr.length - 4] + '/' + arr[arr.length - 3];
                     }
                 };
 
-                //INFO: Changed
-                //ZeroClipboard.config({swfPath: fm.settings.baseUrl + '/scripts/zeroclipboard/dist/ZeroClipboard.swf'});
-                ZeroClipboard.config({swfPath: fm.settings.baseUrl + '/' + assetsDir + '/scripts/zeroclipboard/dist/ZeroClipboard.swf'});
+                ZeroClipboard.config({swfPath: fm.settings.baseUrl + '/scripts/zeroclipboard/dist/ZeroClipboard.swf'});
 
                 this.afterRender = function () {
                     preview_model.renderer.render(preview_model.viewer.content());
@@ -2894,18 +2890,12 @@ assetsDir = arr[arr.length - 4] + '/' + arr[arr.length - 3];
 
             if (type === 'user') {
                 if (_url_.param('config')) {
-                    //INFO: Changed
-                    //url = fm.settings.baseUrl + '/config/' + _url_.param('config');
-                    url = fm.settings.baseUrl + '/' + assetsDir + '/config/' + $.urlParam('config');                  
+                    url = fm.settings.baseUrl + '/config/' + _url_.param('config');
                 } else {
-                    //INFO: Changed
-                    //url = fm.settings.baseUrl + '/config/filemanager.config.json';
-                    url = fm.settings.baseUrl + '/' + assetsDir + '/config/filemanager.config.json';                   
+                    url = fm.settings.baseUrl + '/config/filemanager.config.json';
                 }
             } else {
-                //INFO: Changed
-                    //url = fm.settings.baseUrl + '/config/filemanager.config.default.json';
-                    url = fm.settings.baseUrl + '/' + assetsDir + '/config/filemanager.config.default.json';                   
+                url = fm.settings.baseUrl + '/config/filemanager.config.default.json';      
             }
 
             return $.ajax({
@@ -2923,9 +2913,7 @@ assetsDir = arr[arr.length - 4] + '/' + arr[arr.length - 3];
         var loadAssets = function (assets) {
             for (var i = 0, l = assets.length; i < l; i++) {
                 if (typeof assets[i] === 'string') {
-                    //INFO: Changed
-                    //assets[i] = fm.settings.baseUrl + assets[i];
-                    assets[i] = fm.settings.baseUrl + '/' + assetsDir + assets[i];
+                    assets[i] = fm.settings.baseUrl + assets[i];
                 }
             }
 
@@ -2936,9 +2924,7 @@ assetsDir = arr[arr.length - 4] + '/' + arr[arr.length - 3];
         var loadTemplate = function (id, data) {
             return $.ajax({
                 type: 'GET',
-                //INFO: Changed
-                //url: fm.settings.baseUrl + '/scripts/templates/' + id + '.html',
-                url: fm.settings.baseUrl + '/' + assetsDir + '/scripts/templates/' + id + '.html',
+                url: fm.settings.baseUrl + '/scripts/templates/' + id + '.html',
                 error: handleAjaxError
             });           
         };
@@ -4303,9 +4289,7 @@ assetsDir = arr[arr.length - 4] + '/' + arr[arr.length - 3];
                                     var $template = $(tmpl('tmpl-upload-item', {
                                         file: file,
                                         lang: lg,
-                                        //INFO: Changed
-                                        //imagesPath: fm.settings.baseUrl + '/scripts/jQuery-File-Upload/img'
-                                        imagesPath: fm.settings.baseUrl + '/' + assetsDir + '/scripts/jQuery-File-Upload/img'
+                                        imagesPath: fm.settings.baseUrl + '/scripts/jQuery-File-Upload/img'
                                     }));
 
                                     file.context = $template;

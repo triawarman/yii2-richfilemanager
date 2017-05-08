@@ -23,7 +23,7 @@ class RichFilemanagerViewAsset extends AssetBundle{
     ];
     public $js = [
         //'scripts/jquery-1.11.3.min.js',
-        //'scripts/jquery-ui.min.js',
+        'scripts/jquery-ui/jquery-ui.min.js',
         'scripts/jquery-browser.js',
         'scripts/knockout-3.4.0.js',
         'scripts/jquery-mousewheel/jquery.mousewheel.min.js',
