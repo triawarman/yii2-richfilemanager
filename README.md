@@ -43,7 +43,7 @@ class MediaManagerController extends Controller
         return[
             'file-manager'=>[
                 'class' => FileManagerAction::className(),
-                'auth' => true, //INFO: Default true
+                'auth' => true, //INFO: Default true, you could pass this option
                 'serverConfig' => [
                     'options' =>[
                         "serverRoot" => true,
@@ -68,9 +68,18 @@ if you want passing some plugin parameters
 
 ```
 
-For now you can only set culture, theme, and connectorUrl parameter for client side plugin.
+You can only set culture, theme, and connectorUrl parameter for client side plugin.
 
-Default connectorUrl is your {active control}/file-manager.
+Default connectorUrl is your {active control}/file-manager if you want to change do :
+
+```php
+<?= triawarman\richFilemanager\RichFilemanagerView::widget({"apiConnectorUrl": "your_absolute_url"}); ?>
+
+or
+
+<?= triawarman\richFilemanager\RichFilemanagerView::widget({"config":{"api":{"connectorUrl": "your_absolute_url"}}}); ?>
+
+```
 
 Documentation
 ------------
