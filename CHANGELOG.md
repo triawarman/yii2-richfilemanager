@@ -11,7 +11,6 @@ Version 0.2
 * Changes some code
     a) RichFilemanagerViewAsset.php
     b) views/interface.php
-    c) assets/scripts/filemanager.js
 
 Version 0.1
 -------------------------------
@@ -26,4 +25,4 @@ Version 0.1
         - Alter $this->fm-path, to get "web" folder location, not "web/assets"
     c) connector/filemanager.php
     d) assets/scripts/filemanager.js
-        - Added function to check published folder name, and the exact location
+        a) Added function to check published folder name, and the exact location
