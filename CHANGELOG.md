@@ -1,3 +1,12 @@
+Version 0.3
+-------------------------------
+* Using 
+    servoceoder/richfilemanager ver 2.3.2
+* Adjustment files
+* Changes some code
+    a) assets/scripts/filemanager.js 
+        - Added function to customize viewer.absolutePath, viewer.previewUrl, and viewer.pathToFileOnly
+
 Version 0.2
 -------------------------------
 * Using 
