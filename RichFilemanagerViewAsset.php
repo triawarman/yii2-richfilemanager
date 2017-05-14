@@ -15,7 +15,8 @@ class RichFilemanagerViewAsset extends AssetBundle{
     ];
     public $css = [
         'styles/reset.css',
-        'styles/filemanager.css',
+        //'styles/filemanager.css',
+         YII_ENV_DEV ? 'styles/filemanager.css' : 'styles/filemanager.min.css',
         'scripts/jquery.contextmenu/dist/jquery.contextMenu.min.css',
         //INFO: called from filemanager.js
         //'scripts/custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css',
@@ -37,7 +38,8 @@ class RichFilemanagerViewAsset extends AssetBundle{
         'scripts/purl/purl.min.js',
         //TODO: Change this when in production mode
         //'scripts/filemanager.min.js',
-        'scripts/filemanager.js',
+        //'scripts/filemanager.js',
+        YII_ENV_DEV ? 'scripts/filemanager.js' : 'scripts/filemanager.min.js'
         //'config/filemanager.init.js',
     ];
     public $depends = [

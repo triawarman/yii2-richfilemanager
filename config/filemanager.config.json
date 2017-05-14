@@ -62,7 +62,7 @@
         "chunkSize": false
     },
     "viewer": {
-        "absolutePath": false,
+        "absolutePath": true,
         "previewUrl": false,
         "image": {
             "enabled": true,

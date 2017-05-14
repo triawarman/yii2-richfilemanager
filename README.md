@@ -1,4 +1,4 @@
-# yii2-richfilemanager
+yii2-richfilemanager
 ======
 Yii 2 wrapper for servocoder/RichFilemanager
 
@@ -64,13 +64,31 @@ and in the view
 
 if you want passing some plugin parameters
 
-<?= triawarman\richFilemanager\RichFilemanagerView::widget({"config":{"options":{"culture":"it","theme":"flat-dark"}}}); ?>
+<?= triawarman\richFilemanager\RichFilemanagerView::widget({
+"config":{
+    "options":{
+        "culture":"it",
+        "theme":"flat-dark"
+    },
+    "viewer":{
+        "absolutePath":true,
+        "previewUrl":"yourdomain.com/path/to/public_folder/",
+        "pathToFileOnly": true
+    },
+}
+}); ?>
 
 ```
 
-You can only set culture, theme, and connectorUrl parameter for client side plugin.
+Configuration that you can sets are :
+1 options => culture
+2 options => theme
+3 options => connectorUrl
+4 viewer => absolutePath
+5 viewer => previewUrl
+6 viewer => pathToFileOnly
 
-Default connectorUrl is your {active control}/file-manager if you want to change do :
+Default connectorUrl is your {active control}/file-manager if you want to change, do :
 
 ```php
 <?= triawarman\richFilemanager\RichFilemanagerView::widget({"apiConnectorUrl": "your_absolute_url"}); ?>
@@ -80,6 +98,24 @@ or
 <?= triawarman\richFilemanager\RichFilemanagerView::widget({"config":{"api":{"connectorUrl": "your_absolute_url"}}}); ?>
 
 ```
+
+When doing 
+
+```php
+<?= triawarman\richFilemanager\RichFilemanagerView::widget({
+"config":{
+    "viewer":{
+        "absolutePath":true,
+        "previewUrl":"yourdomain.com/path/to/public_folder/",
+        "pathToFileOnly": true
+    },
+}
+}); ?>
+
+```
+
+the selected image will provide short address e.g image.png or folder/image.png
+
 
 Documentation
 ------------

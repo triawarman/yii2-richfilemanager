@@ -3170,8 +3170,19 @@ assetsDir = arr[arr.length - 4] + '/' + arr[arr.length - 3];
         var createPreviewUrl = function (resourceObject, encode) {
             var previewUrl,
                     objectPath = resourceObject.attributes.path;
-
-            if (config.viewer.absolutePath && objectPath) {
+            //INFO: Changed
+            //Start Own Script
+            var absolutePath;
+            try{
+                if(fm.settings.config.viewer.absolutePath !== undefined && (typeof fm.settings.config.viewer.absolutePath === "boolean")){
+                    absolutePath = fm.settings.config.viewer.absolutePath;
+                }
+            } catch(e){
+                absolutePath = config.viewer.absolutePath;
+            }
+            //End
+            //if (config.viewer.absolutePath && objectPath) {
+            if (absolutePath && objectPath) {
                 if (encode) {
                     objectPath = encodePath(objectPath);
                 }
@@ -3195,7 +3206,19 @@ assetsDir = arr[arr.length - 4] + '/' + arr[arr.length - 3];
                             (thumbnail && config.viewer.image.showThumbs) ||
                             (!thumbnail && config.viewer.image.enabled === true)
                             )) {
-                if (config.viewer.absolutePath && !thumbnail && resourceObject.attributes.path) {
+                //INFO: Changed
+                //Start Own Script
+                var absolutePath;
+                try{
+                    if(fm.settings.config.viewer.absolutePath !== undefined && (typeof fm.settings.config.viewer.absolutePath === "boolean")){
+                        absolutePath = fm.settings.config.viewer.absolutePath;
+                    }
+                } catch(e){
+                    absolutePath = config.viewer.absolutePath;
+                }
+                //End
+                //if (config.viewer.absolutePath && !thumbnail && resourceObject.attributes.path) {
+                if (absolutePath && !thumbnail && resourceObject.attributes.path) {
                     imageUrl = buildAbsolutePath(encodePath(resourceObject.attributes.path), disableCache);
                 } else {
                     var queryParams = {path: resourceObject.id};
@@ -3215,7 +3238,18 @@ assetsDir = arr[arr.length - 4] + '/' + arr[arr.length - 3];
         };
 
         var buildAbsolutePath = function (path, disableCache) {
-            var url = (typeof config.viewer.previewUrl === "string") ? config.viewer.previewUrl : location.origin;
+            //INFO: Changed
+            //var url = (typeof config.viewer.previewUrl === "string") ? config.viewer.previewUrl : location.origin;
+            var url;
+            //Start Own Script
+            try{
+                if(fm.settings.config.viewer.previewUrl !== undefined && trim(fm.settings.config.viewer.previewUrl) != ''){
+                    url = (typeof fm.settings.config.viewer.previewUrl === "string") ? fm.settings.config.viewer.previewUrl : location.origin;
+                }
+            } catch(e){
+                var url = (typeof config.viewer.previewUrl === "string") ? config.viewer.previewUrl : location.origin;
+            }
+            //End
             url = trim(url, '/') + path;
             // add timestamp-based query parameter to disable browser caching
             if (disableCache) {
@@ -3329,6 +3363,16 @@ assetsDir = arr[arr.length - 4] + '/' + arr[arr.length - 3];
 
             previewUrl = fm.settings.callbacks.beforeSelectItem(resourceObject, previewUrl);
 
+            //INFO: Changed | Own
+            pathToFileOnly = (typeof fm.settings.config.viewer.pathToFileOnly === "boolean");
+            if(fm.settings.config.viewer.previewUrl !== undefined && pathToFileOnly == true){
+                if(fm.settings.config.viewer.pathToFileOnly == true && fm.settings.config.viewer.absolutePath == true){
+                    var ownSettings = fm.settings.config.viewer.previewUrl;
+                    previewUrl = previewUrl.substring(ownSettings.length);
+                }
+            }
+            //End
+            
             // tinyMCE > 3.0 integration method
             if (window.tinyMCEPopup) {
                 var win = tinyMCEPopup.getWindowArg("window");
