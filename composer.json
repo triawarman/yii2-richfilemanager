@@ -1,0 +1,34 @@
+{
+    "name": "triawarman/yii2-richfilemanager",
+    "description": "Yii 2 wrapper for servocoder/RichFilemanager",
+    "type": "yii2-extension",
+    "keywords": ["yii2", "extension", "file manager"],
+    "license": "MIT",
+    "homepage": "https://github.com/triawarman/yii2-richfilemanager",
+    "authors": [
+        {
+            "name": "Triawarman",
+            "email": "3awarman@gmail.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/triawarman/yii2-richfilemanager/issues?state=open",
+        "wiki": "https://github.com/triawarman/yii2-richfilemanager",
+        "source": "https://github.com/triawarman/yii2-richfilemanager"
+    },
+    "require": {
+        "yiisoft/yii2": "*",
+        "triawarman/yii2-richfilemanager": "*"
+    },
+    "repositories":[
+        {
+            "type": "path",
+            "url": "/home/triawarman/My Projects/Yii2 Extension/yii2-richfilemanager/"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "triawarman\\richFilemanager\\": ""
+        }
+    }
+}
